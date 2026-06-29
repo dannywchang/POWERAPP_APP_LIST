@@ -1,0 +1,30 @@
+App:
+  Properties:
+    Formulas: |-
+      =AppTitle = If(varLang = "EN", "PowerApps Store", "應用程式商店");
+      LblAll = If(varLang = "EN", "All", "全部");
+      SearchHint = If(varLang = "EN", "Search APP name, Owner, or Description", "搜尋應用程式名稱、負責人或說明");
+      LblOwner = If(varLang = "EN", "App Owner", "應用程式負責人");
+      LblLastUpdate = If(varLang = "EN", "Last Updated", "最後更新");
+      LblOpenApp = If(varLang = "EN", "Open App", "開啟應用程式");
+      TaskTitle = If(varLang = "EN", "My Tasks", "我的待辦");
+      LblApplicant = If(varLang = "EN", "Applicant", "申請人");
+      LblCreatedDate = If(varLang = "EN", "Created", "建立日期");
+      LblStatus = If(varLang = "EN", "Status", "狀態");
+      LblNoTasks = If(varLang = "EN", "No pending tasks", "無待辦事項");
+      LblApprovalTitle = If(varLang = "EN", "Approval Decision", "審核決策");
+      LblDecision = If(varLang = "EN", "Decision", "決策");
+      LblComment = If(varLang = "EN", "Comment", "備註");
+      LblSubmit = If(varLang = "EN", "Submit", "提交");
+      LblApprove = If(varLang = "EN", "Approve", "核准");
+      LblReject = If(varLang = "EN", "Reject", "退回");
+      LblBack = If(varLang = "EN", "Back", "返回");
+      LblSubmitted = If(varLang = "EN", "Submitted Date", "提交日期");
+      LblPriority = If(varLang = "EN", "Priority", "優先順序");
+      LblRequestTitle = If(varLang = "EN", "Request Title", "申請標題");
+      LblTaskID = If(varLang = "EN", "Task ID", "任務編號");
+      LblCommentRequired = If(varLang = "EN", "Comment is required when rejecting", "退回時必須填寫備註");
+      LblSuccess = If(varLang = "EN", "Decision submitted successfully!", "決策已成功提交！");
+      LblOpenApplication = If(varLang = "EN", "Open Application", "開啟申請")
+    OnStart: =Set(varLang, "ZH")
+    Theme: =PowerAppsTheme

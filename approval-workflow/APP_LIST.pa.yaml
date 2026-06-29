@@ -1,0 +1,486 @@
+Screens:
+  APP_LIST:
+    Properties:
+      Fill: =RGBA(255, 255, 255, 1)
+      LoadingSpinnerColor: =RGBA(0, 112, 242, 1)
+      OnVisible: |-
+        =Set(varCategory, "ALL");
+        Set(varCategoryOpen, false);
+        ClearCollect(CL_Departments, [{Value: "ALL"}]);
+        Collect(CL_Departments, Sort(Distinct(SPSH_APPsList, Text(Department)), Value))
+    Children:
+      - CON_LIST:
+          Control: GroupContainer
+          Variant: AutoLayout
+          Properties:
+            DropShadow: =DropShadow.None
+            Fill: =RGBA(245, 246, 247, 1)
+            Height: =Parent.Height
+            LayoutAlignItems: =LayoutAlignItems.Stretch
+            LayoutDirection: =LayoutDirection.Vertical
+            LayoutGap: =16
+            PaddingBottom: =20
+            PaddingLeft: =20
+            PaddingRight: =20
+            PaddingTop: =20
+            RadiusBottomLeft: =16
+            RadiusBottomRight: =16
+            RadiusTopLeft: =16
+            RadiusTopRight: =16
+            Width: =Parent.Width
+          Children:
+            - CON_HEADER:
+                Control: GroupContainer
+                Variant: AutoLayout
+                Properties:
+                  Fill: =RGBA(53, 74, 94, 1)
+                  FillPortions: =0
+                  Height: =56
+                  LayoutAlignItems: =LayoutAlignItems.Center
+                  LayoutDirection: =LayoutDirection.Horizontal
+                  LayoutGap: =4
+                  LayoutJustifyContent: =LayoutJustifyContent.SpaceBetween
+                  LayoutMinHeight: =32
+                  LayoutMinWidth: =32
+                  PaddingLeft: =24
+                  PaddingRight: =24
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =16
+                  RadiusTopRight: =16
+                Children:
+                  - LBL_PAGE_TITLE:
+                      Control: Label
+                      Properties:
+                        BorderColor: =RGBA(0, 0, 0, 0)
+                        BorderStyle: =BorderStyle.None
+                        Color: =RGBA(255, 255, 255, 1)
+                        DisabledColor: =RGBA(186, 186, 186, 1)
+                        FillPortions: =1
+                        Font: =Font.'Segoe UI'
+                        FontWeight: =FontWeight.Bold
+                        Height: =56
+                        Size: =24
+                        Text: =AppTitle
+                        Width: =500
+                  - BTN_LANGUAGE:
+                      Control: Classic/Button
+                      Properties:
+                        BorderColor: =RGBA(255, 255, 255, 0.4)
+                        BorderThickness: =1
+                        Color: =RGBA(255, 255, 255, 1)
+                        DisabledBorderColor: =ColorFade(Self.BorderColor, 70%)
+                        DisabledColor: =ColorFade(Self.Fill, 90%)
+                        DisabledFill: =ColorFade(Self.Fill, 70%)
+                        Fill: =RGBA(53, 74, 94, 1)
+                        Font: =Font.'Segoe UI'
+                        Height: =36
+                        HoverBorderColor: =RGBA(255, 255, 255, 0.8)
+                        HoverColor: =RGBA(255, 255, 255, 1)
+                        HoverFill: =RGBA(255, 255, 255, 0.15)
+                        OnSelect: =Set(varLang, If(varLang = "EN", "ZH", "EN"))
+                        PressedBorderColor: =Self.Fill
+                        PressedColor: =RGBA(255, 255, 255, 1)
+                        PressedFill: =RGBA(255, 255, 255, 0.25)
+                        RadiusBottomLeft: =8
+                        RadiusBottomRight: =8
+                        RadiusTopLeft: =8
+                        RadiusTopRight: =8
+                        Size: =13
+                        Text: =If(varLang = "EN", "中文", "EN")
+                        Width: =72
+            - CON_TOOL_BAR:
+                Control: GroupContainer
+                Variant: AutoLayout
+                Properties:
+                  Fill: =RGBA(255, 255, 255, 1)
+                  FillPortions: =0
+                  Height: =48
+                  LayoutAlignItems: =LayoutAlignItems.Center
+                  LayoutDirection: =LayoutDirection.Horizontal
+                  LayoutGap: =12
+                  LayoutJustifyContent: =LayoutJustifyContent.SpaceBetween
+                  LayoutMinHeight: =32
+                  LayoutMinWidth: =32
+                  PaddingLeft: =16
+                  PaddingRight: =16
+                  RadiusBottomLeft: =12
+                  RadiusBottomRight: =12
+                  RadiusTopLeft: =12
+                  RadiusTopRight: =12
+                Children:
+                  - CON_CATEGORY:
+                      Control: GroupContainer
+                      Variant: AutoLayout
+                      Properties:
+                        DropShadow: =DropShadow.None
+                        Fill: =RGBA(255, 255, 255, 0)
+                        LayoutAlignItems: =LayoutAlignItems.Center
+                        LayoutDirection: =LayoutDirection.Horizontal
+                        LayoutGap: =8
+                        LayoutMinHeight: =32
+                        LayoutMinWidth: =32
+                        RadiusBottomLeft: =0
+                        RadiusBottomRight: =0
+                        RadiusTopLeft: =0
+                        RadiusTopRight: =0
+                      Children:
+                        - BTN_HAMBURGER:
+                            Control: Classic/Button
+                            Properties:
+                              BorderColor: =RGBA(0, 0, 0, 0)
+                              BorderStyle: =BorderStyle.None
+                              BorderThickness: =0
+                              Color: =If(varCategoryOpen, RGBA(0, 112, 242, 1), RGBA(50, 54, 58, 1))
+                              DisabledBorderColor: =ColorFade(Self.BorderColor, 70%)
+                              DisabledColor: =ColorFade(Self.Fill, 90%)
+                              DisabledFill: =ColorFade(Self.Fill, 70%)
+                              Fill: =If(varCategoryOpen, RGBA(235, 245, 254, 1), RGBA(255, 255, 255, 1))
+                              Font: =Font.'Segoe UI'
+                              Height: =48
+                              HoverBorderColor: =ColorFade(Self.BorderColor, 20%)
+                              HoverColor: =RGBA(0, 112, 242, 1)
+                              HoverFill: =RGBA(235, 245, 254, 1)
+                              OnSelect: =Set(varCategoryOpen, !varCategoryOpen)
+                              PaddingLeft: =14
+                              PaddingRight: =14
+                              PressedBorderColor: =Self.Fill
+                              PressedColor: =Self.Fill
+                              PressedFill: =RGBA(0, 64, 141, 1)
+                              RadiusBottomLeft: =12
+                              RadiusBottomRight: =12
+                              RadiusTopLeft: =12
+                              RadiusTopRight: =12
+                              Size: =18
+                              Text: ="☰"
+                              Width: =56
+                        - LBL_SELECTED_CATEGORY:
+                            Control: Label
+                            Properties:
+                              BorderColor: =RGBA(0, 0, 0, 0)
+                              BorderStyle: =BorderStyle.None
+                              Color: =RGBA(0, 112, 242, 1)
+                              DisabledColor: =RGBA(186, 186, 186, 1)
+                              Font: =Font.'Segoe UI'
+                              FontWeight: =FontWeight.Semibold
+                              Height: =48
+                              Text: =If(varCategory = "ALL", LblAll, varCategory)
+                              Width: =100
+                  - CON_TOOL_GROUP:
+                      Control: GroupContainer
+                      Variant: AutoLayout
+                      Properties:
+                        DropShadow: =DropShadow.None
+                        Fill: =RGBA(255, 255, 255, 0)
+                        FillPortions: =0
+                        LayoutAlignItems: =LayoutAlignItems.Center
+                        LayoutDirection: =LayoutDirection.Horizontal
+                        LayoutGap: =10
+                        LayoutJustifyContent: =LayoutJustifyContent.End
+                        LayoutMinHeight: =32
+                        LayoutMinWidth: =32
+                        RadiusBottomLeft: =0
+                        RadiusBottomRight: =0
+                        RadiusTopLeft: =0
+                        RadiusTopRight: =0
+                      Children:
+                        - TXT_SEARCH:
+                            Control: Classic/TextInput
+                            Properties:
+                              BorderColor: =RGBA(217, 217, 217, 1)
+                              BorderThickness: =1
+                              Color: =RGBA(50, 54, 58, 1)
+                              Default: =""
+                              DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                              DisabledColor: =RGBA(161, 159, 157, 1)
+                              DisabledFill: =Self.Fill
+                              FillPortions: =1
+                              FocusedBorderThickness: =2
+                              Font: =Font.'Segoe UI'
+                              Height: =36
+                              HintText: =SearchHint
+                              HoverBorderColor: =RGBA(0, 112, 242, 1)
+                              HoverColor: =Self.Color
+                              HoverFill: =Self.Fill
+                              PaddingLeft: =8
+                              RadiusBottomLeft: =8
+                              RadiusBottomRight: =8
+                              RadiusTopLeft: =8
+                              RadiusTopRight: =8
+                              Size: =12
+                              Width: =300
+            - CON_MAIN:
+                Control: GroupContainer
+                Variant: AutoLayout
+                Properties:
+                  DropShadow: =DropShadow.None
+                  Fill: =RGBA(255, 255, 255, 0)
+                  LayoutDirection: =LayoutDirection.Vertical
+                  LayoutMinHeight: =32
+                  LayoutMinWidth: =32
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =0
+                  RadiusTopRight: =0
+                Children:
+                  - GAL_APP_LIST:
+                      Control: Gallery
+                      Variant: BrowseLayout_Vertical_TwoTextOneImageTwoColumnOverlayVariant_ver5.0
+                      Properties:
+                        AlignInContainer: =AlignInContainer.SetByContainer
+                        BorderColor: =RGBA(0, 0, 0, 0)
+                        DelayItemLoading: =true
+                        Items: |-
+                          =With(
+                              {
+                                  searchTerm: Lower(Trim(TXT_SEARCH.Text)),
+                                  dataSource: If(
+                                      varCategory = "ALL",
+                                      SPSH_APPsList,
+                                      Filter(SPSH_APPsList, Text(Department) = varCategory)
+                                  )
+                              },
+                              Filter(
+                                  dataSource,
+                                  IsBlank(searchTerm)
+                                      || searchTerm in Lower(Coalesce(Title, ""))
+                                      || searchTerm in Lower(Coalesce(Description, ""))
+                                      || searchTerm in Lower(Coalesce('Modified By'.DisplayName, ""))
+                              )
+                          )
+                        LoadingSpinner: =LoadingSpinner.Data
+                        TemplatePadding: =10
+                        TemplateSize: =300
+                        Width: =Parent.Width
+                        WrapCount: =If(Self.Width < 900, 1, If(Self.Width < 1360, 2, 3))
+                      Children:
+                        - CardBackground:
+                            Control: GroupContainer
+                            Variant: AutoLayout
+                            Properties:
+                              BorderColor: =RGBA(217, 217, 217, 1)
+                              BorderThickness: =1
+                              Fill: =RGBA(255, 255, 255, 1)
+                              Height: =Parent.TemplateHeight - 16
+                              LayoutDirection: =LayoutDirection.Horizontal
+                              RadiusBottomLeft: =12
+                              RadiusBottomRight: =12
+                              RadiusTopLeft: =12
+                              RadiusTopRight: =12
+                              Width: =Parent.TemplateWidth - 16
+                              X: =8
+                              Y: =8
+                        - CategoryBadge:
+                            Control: Label
+                            Properties:
+                              BorderColor: =RGBA(0, 0, 0, 0)
+                              BorderStyle: =BorderStyle.None
+                              Color: =RGBA(0, 64, 174, 1)
+                              DisabledColor: =RGBA(186, 186, 186, 1)
+                              Fill: =RGBA(235, 245, 254, 1)
+                              Font: =Font.'Segoe UI'
+                              FontWeight: =FontWeight.Semibold
+                              Height: =28
+                              PaddingLeft: =12
+                              PaddingRight: =12
+                              Size: =11
+                              Text: =Coalesce(ThisItem.FormType, ThisItem.Enviornments.Value, "其他")
+                              Width: =96
+                              X: =24
+                              Y: =30
+                        - DataSourceLabel:
+                            Control: Label
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 0)
+                              BorderStyle: =BorderStyle.None
+                              Color: =RGBA(88, 96, 105, 1)
+                              DisabledColor: =RGBA(186, 186, 186, 1)
+                              Fill: =RGBA(247, 249, 252, 1)
+                              Font: =Font.'Segoe UI'
+                              Height: =24
+                              Size: =10
+                              Text: ="SPSH_APPsList"
+                              Visible: =false
+                              Width: =102
+                              X: =Parent.TemplateWidth - 126
+                              Y: =26
+                        - AppNameLabel:
+                            Control: Label
+                            Properties:
+                              BorderColor: =RGBA(0, 0, 0, 0)
+                              BorderStyle: =BorderStyle.None
+                              Color: =RGBA(32, 38, 44, 1)
+                              DisabledColor: =RGBA(186, 186, 186, 1)
+                              Font: =Font.'Segoe UI'
+                              FontWeight: =FontWeight.Bold
+                              Height: =32
+                              Size: =18
+                              Text: =Coalesce(ThisItem.Title, "IT_ASSET_MANAGEMENT")
+                              Width: =Parent.TemplateWidth - 48
+                              X: =24
+                              Y: =66
+                        - DescriptionLabel:
+                            Control: Label
+                            Properties:
+                              BorderColor: =RGBA(0, 0, 0, 0)
+                              BorderStyle: =BorderStyle.None
+                              Color: =RGBA(88, 96, 105, 1)
+                              DisabledColor: =RGBA(186, 186, 186, 1)
+                              Font: =Font.'Segoe UI'
+                              Height: =42
+                              Overflow: =Overflow.Scroll
+                              Size: =12
+                              Text: =Coalesce(ThisItem.Description, "內部員工應用程式入口，提供日常流程與資訊整合。")
+                              Width: =Parent.TemplateWidth - 48
+                              X: =24
+                              Y: =102
+                        - OwnerCaption:
+                            Control: Label
+                            Properties:
+                              BorderColor: =RGBA(0, 0, 0, 0)
+                              BorderStyle: =BorderStyle.None
+                              Color: =RGBA(96, 103, 112, 1)
+                              DisabledColor: =RGBA(186, 186, 186, 1)
+                              Font: =Font.'Segoe UI'
+                              FontWeight: =FontWeight.Semibold
+                              Height: =20
+                              Size: =11
+                              Text: =LblOwner
+                              X: =24
+                              Y: =162
+                        - OwnerValue:
+                            Control: Label
+                            Properties:
+                              BorderColor: =RGBA(0, 0, 0, 0)
+                              BorderStyle: =BorderStyle.None
+                              Color: =RGBA(50, 54, 58, 1)
+                              DisabledColor: =RGBA(186, 186, 186, 1)
+                              Font: =Font.'Segoe UI'
+                              Height: =20
+                              Size: =11
+                              Text: =Coalesce(ThisItem.'Modified By'.DisplayName, "Jemmy Chang")
+                              Width: =455
+                              X: =178
+                              Y: =162
+                        - LastUpdateCaption:
+                            Control: Label
+                            Properties:
+                              BorderColor: =RGBA(0, 0, 0, 0)
+                              BorderStyle: =BorderStyle.None
+                              Color: =RGBA(96, 103, 112, 1)
+                              DisabledColor: =RGBA(186, 186, 186, 1)
+                              Font: =Font.'Segoe UI'
+                              FontWeight: =FontWeight.Semibold
+                              Height: =32
+                              Size: =11
+                              Text: =LblLastUpdate
+                              Width: =154
+                              X: =24
+                              Y: =186
+                        - LastUpdateValue:
+                            Control: Label
+                            Properties:
+                              BorderColor: =RGBA(0, 0, 0, 0)
+                              BorderStyle: =BorderStyle.None
+                              Color: =RGBA(50, 54, 58, 1)
+                              DisabledColor: =RGBA(186, 186, 186, 1)
+                              Font: =Font.'Segoe UI'
+                              Height: =20
+                              Size: =11
+                              Text: =Text(Coalesce(ThisItem.Modified, Today()), "[$-zh-TW]yyyy/mm/dd")
+                              Width: =455
+                              X: =130
+                              Y: =192
+                        - OpenAppButton:
+                            Control: Classic/Button
+                            Properties:
+                              BorderColor: =RGBA(0, 112, 242, 1)
+                              BorderStyle: =BorderStyle.None
+                              BorderThickness: =0
+                              Color: =RGBA(255, 255, 255, 1)
+                              DisabledBorderColor: =ColorFade(Self.BorderColor, 70%)
+                              DisabledColor: =ColorFade(Self.Fill, 90%)
+                              DisabledFill: =ColorFade(Self.Fill, 70%)
+                              Fill: =RGBA(0, 112, 242, 1)
+                              Font: =Font.'Segoe UI'
+                              Height: =42
+                              HoverBorderColor: =ColorFade(Self.BorderColor, 20%)
+                              HoverColor: =Self.Color
+                              HoverFill: =RGBA(0, 86, 187, 1)
+                              OnSelect: =Launch(ThisItem.WebLink)
+                              PressedBorderColor: =Self.Fill
+                              PressedColor: =Self.Fill
+                              PressedFill: =RGBA(0, 64, 141, 1)
+                              RadiusBottomLeft: =8
+                              RadiusBottomRight: =8
+                              RadiusTopLeft: =8
+                              RadiusTopRight: =8
+                              Size: =13
+                              Text: =LblOpenApp
+                              Width: =Parent.TemplateWidth - 48
+                              X: =24
+                              Y: =232
+      - CON_CATEGORY_DROPDOWN:
+          Control: GroupContainer
+          Variant: AutoLayout
+          Properties:
+            DropShadow: =DropShadow.Regular
+            Fill: =RGBA(255, 255, 255, 1)
+            Height: =CountRows(CL_Departments) * 40
+            LayoutDirection: =LayoutDirection.Vertical
+            RadiusBottomLeft: =12
+            RadiusBottomRight: =12
+            RadiusTopLeft: =12
+            RadiusTopRight: =12
+            Visible: =varCategoryOpen
+            Width: =200
+            X: =36
+            Y: =140
+          Children:
+            - GAL_DEPT_MENU:
+                Control: Gallery
+                Variant: BrowseLayout_Vertical_TwoTextOneImageTwoColumnOverlayVariant_ver5.0
+                Properties:
+                  AlignInContainer: =AlignInContainer.Start
+                  BorderColor: =RGBA(0, 0, 0, 0)
+                  BorderStyle: =BorderStyle.None
+                  DelayItemLoading: =true
+                  Height: =Parent.Height
+                  Items: =CL_Departments
+                  TemplatePadding: =0
+                  TemplateSize: =40
+                  Width: =Parent.Width
+                  WrapCount: =1
+                Children:
+                  - BTN_DEPT_ITEM:
+                      Control: Classic/Button
+                      Properties:
+                        Align: =Align.Left
+                        BorderColor: =RGBA(0, 0, 0, 0)
+                        BorderStyle: =BorderStyle.None
+                        BorderThickness: =0
+                        Color: =If(varCategory = ThisItem.Value, RGBA(0, 112, 242, 1), RGBA(50, 54, 58, 1))
+                        DisabledBorderColor: =ColorFade(Self.BorderColor, 70%)
+                        DisabledColor: =ColorFade(Self.Fill, 90%)
+                        DisabledFill: =ColorFade(Self.Fill, 70%)
+                        Fill: =If(varCategory = ThisItem.Value, RGBA(235, 245, 254, 1), RGBA(255, 255, 255, 1))
+                        Font: =Font.'Segoe UI'
+                        Height: =34
+                        HoverBorderColor: =ColorFade(Self.BorderColor, 20%)
+                        HoverColor: =RGBA(0, 112, 242, 1)
+                        HoverFill: =RGBA(235, 245, 254, 1)
+                        OnSelect: =Set(varCategory, ThisItem.Value); Set(varCategoryOpen, false)
+                        PaddingLeft: =14
+                        PaddingRight: =14
+                        PressedBorderColor: =Self.Fill
+                        PressedColor: =Self.Fill
+                        PressedFill: =RGBA(0, 64, 141, 1)
+                        RadiusBottomLeft: =8
+                        RadiusBottomRight: =8
+                        RadiusTopLeft: =8
+                        RadiusTopRight: =8
+                        Size: =14
+                        Text: =If(ThisItem.Value = "ALL", LblAll, ThisItem.Value)
+                        Width: =196
+                        Y: =5

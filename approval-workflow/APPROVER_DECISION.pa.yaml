@@ -1,0 +1,413 @@
+Screens:
+  APPROVER_DECISION:
+    Properties:
+      Fill: =RGBA(255, 255, 255, 1)
+      LoadingSpinnerColor: =RGBA(0, 112, 242, 1)
+      OnVisible: |-
+        =Set(varSelectedTask, Blank());
+        Set(varDecision, "");
+        Set(varComment, "");
+        Set(varIsSubmitting, false);
+        Set(varViewingTask, false);
+        Set(varSubmitError, "");
+        Set(varSuccessVisible, false)
+    Children:
+      - CON_MAIN_3:
+          Control: GroupContainer
+          Variant: AutoLayout
+          Properties:
+            DropShadow: =DropShadow.None
+            Fill: =RGBA(245, 246, 247, 1)
+            Height: =Parent.Height
+            LayoutAlignItems: =LayoutAlignItems.Stretch
+            LayoutDirection: =LayoutDirection.Vertical
+            LayoutGap: =16
+            PaddingBottom: =20
+            PaddingLeft: =20
+            PaddingRight: =20
+            PaddingTop: =20
+            RadiusBottomLeft: =16
+            RadiusBottomRight: =16
+            RadiusTopLeft: =16
+            RadiusTopRight: =16
+            Width: =Parent.Width
+          Children:
+            - CON_HEADER_2:
+                Control: GroupContainer
+                Variant: AutoLayout
+                Properties:
+                  Fill: =RGBA(53, 74, 94, 1)
+                  FillPortions: =0
+                  Height: =56
+                  LayoutAlignItems: =LayoutAlignItems.Center
+                  LayoutDirection: =LayoutDirection.Horizontal
+                  LayoutGap: =4
+                  LayoutJustifyContent: =LayoutJustifyContent.SpaceBetween
+                  LayoutMinHeight: =32
+                  LayoutMinWidth: =32
+                  PaddingLeft: =16
+                  PaddingRight: =24
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =16
+                  RadiusTopRight: =16
+                Children:
+                  - BTN_BACK:
+                      Control: ModernButton
+                      Properties:
+                        AccessibleLabel: =LblBack
+                        AlignInContainer: =AlignInContainer.Start
+                        Appearance: =ButtonAppearance.Outline
+                        BasePaletteColor: =RGBA(255, 255, 255, 1)
+                        BorderColor: =RGBA(255, 255, 255, 0)
+                        BorderThickness: =0
+                        Color: =RGBA(255, 255, 255, 1)
+                        FontWeight: =FontWeight.Normal
+                        Height: =36
+                        Icon: ="ArrowLeft"
+                        IconStyle: =IconStyle.Filled
+                        OnSelect: =Set(varViewingTask, false)
+                        Size: =13
+                        Text: =LblBack
+                        Visible: =varViewingTask
+                        Width: =80
+                  - LBL_PAGE_TITLE_2:
+                      Control: ModernText
+                      Properties:
+                        AlignInContainer: =AlignInContainer.Start
+                        FillPortions: =1
+                        FontWeight: =FontWeight.Bold
+                        Height: =56
+                        Size: =24
+                        Text: =LblApprovalTitle
+                  - BTN_LANGUAGE_2:
+                      Control: Classic/Button
+                      Properties:
+                        BorderColor: =RGBA(255, 255, 255, 0.4)
+                        BorderThickness: =1
+                        Color: =RGBA(255, 255, 255, 1)
+                        DisabledBorderColor: =ColorFade(Self.BorderColor, 70%)
+                        DisabledColor: =ColorFade(Self.Fill, 90%)
+                        DisabledFill: =ColorFade(Self.Fill, 70%)
+                        Fill: =RGBA(53, 74, 94, 1)
+                        Font: =Font.'Segoe UI'
+                        Height: =36
+                        HoverBorderColor: =RGBA(255, 255, 255, 0.8)
+                        HoverColor: =RGBA(255, 255, 255, 1)
+                        HoverFill: =RGBA(255, 255, 255, 0.15)
+                        OnSelect: =Set(varLang, If(varLang = "EN", "ZH", "EN"))
+                        PressedBorderColor: =Self.Fill
+                        PressedColor: =RGBA(255, 255, 255, 1)
+                        PressedFill: =RGBA(255, 255, 255, 0.25)
+                        RadiusBottomLeft: =8
+                        RadiusBottomRight: =8
+                        RadiusTopLeft: =8
+                        RadiusTopRight: =8
+                        Size: =13
+                        Text: =If(varLang = "EN", "中文", "EN")
+                        Width: =72
+            - CON_GALLERY:
+                Control: GroupContainer
+                Variant: AutoLayout
+                Properties:
+                  DropShadow: =DropShadow.None
+                  Fill: =RGBA(255, 255, 255, 0)
+                  LayoutDirection: =LayoutDirection.Vertical
+                  LayoutGap: =8
+                  LayoutMinHeight: =32
+                  LayoutMinWidth: =32
+                  LayoutOverflowY: =LayoutOverflow.Scroll
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =0
+                  RadiusTopRight: =0
+                  Visible: =!varViewingTask
+                Children:
+                  - LBL_TASK_SUMMARY:
+                      Control: ModernText
+                      Properties:
+                        AccessibleLabel: =If(varLang = "EN", "Pending tasks summary", "待辦事項摘要")
+                        BorderColor: =RGBA(0, 0, 0, 0)
+                        Color: =RGBA(96, 103, 112, 1)
+                        FontWeight: =FontWeight.Semibold
+                        PaddingLeft: =16
+                        Size: =14
+                        Text: =GAL_PENDING_TASKS.AllItemsCount & If(varLang = "EN", " pending task(s)", " 個待辦事項")
+                  - GAL_PENDING_TASKS:
+                      Control: Gallery
+                      Variant: BrowseLayout_Vertical_TwoTextOneImageTwoColumnOverlayVariant_ver5.0
+                      Properties:
+                        AccessibleLabel: =If(varLang = "EN", "Pending approval tasks", "待審批任務")
+                        AlignInContainer: =AlignInContainer.SetByContainer
+                        BorderColor: =RGBA(0, 0, 0, 0)
+                        DelayItemLoading: =true
+                        Height: =CountRows(Self.AllItems) * Self.TemplateHeight
+                        Items: =Filter(CL_ApprovalTasks, Lower(User().Email) in Lower(Approver.Claims) && TaskStatus.Value <> "Completed")
+                        LoadingSpinner: =LoadingSpinner.Data
+                        TemplatePadding: =10
+                        TemplateSize: =260
+                        Width: =Parent.Width
+                        WrapCount: =1
+                      Children:
+                        - TASK_CARD_BG_2:
+                            Control: GroupContainer
+                            Variant: ManualLayout
+                            Properties:
+                              BorderColor: =RGBA(217, 217, 217, 1)
+                              BorderThickness: =1
+                              Fill: =RGBA(255, 255, 255, 1)
+                              Height: =Parent.TemplateHeight - 10
+                              RadiusBottomLeft: =12
+                              RadiusBottomRight: =12
+                              RadiusTopLeft: =12
+                              RadiusTopRight: =12
+                              Width: =Parent.TemplateWidth - 10
+                              X: =5
+                              Y: =5
+                        - TASK_TITLE_2:
+                            Control: ModernText
+                            Properties:
+                              FontWeight: =FontWeight.Bold
+                              Height: =28
+                              Size: =16
+                              Text: =Coalesce(ThisItem.Title, "")
+                              Width: =Parent.TemplateWidth - 200
+                              X: =20
+                              Y: =16
+                        - TASK_STATUS_BADGE_2:
+                            Control: ModernText
+                            Properties:
+                              Color: =If(ThisItem.TaskStatus.Value = "Not Started", RGBA(0, 112, 242, 1), If(ThisItem.TaskStatus.Value = "In Progress", RGBA(208, 130, 0, 1), RGBA(96, 103, 112, 1)))
+                              Fill: =If(ThisItem.TaskStatus.Value = "Not Started", RGBA(235, 245, 254, 1), If(ThisItem.TaskStatus.Value = "In Progress", RGBA(255, 244, 214, 1), RGBA(243, 244, 245, 1)))
+                              FontWeight: =FontWeight.Semibold
+                              Height: =24
+                              PaddingLeft: =10
+                              PaddingRight: =10
+                              RadiusBottomLeft: =4
+                              RadiusBottomRight: =4
+                              RadiusTopLeft: =4
+                              RadiusTopRight: =4
+                              Size: =11
+                              Text: =Coalesce(ThisItem.TaskStatus.Value, "")
+                              Width: =96
+                              X: =Parent.TemplateWidth - 116
+                              Y: =18
+                        - TASK_REQUESTER:
+                            Control: ModernText
+                            Properties:
+                              Color: =RGBA(88, 96, 105, 1)
+                              Height: =20
+                              Size: =12
+                              Text: |-
+                                =LblApplicant & ": " & Coalesce(ThisItem.Applicant.DisplayName, "")
+                              Width: =Parent.TemplateWidth - 40
+                              X: =20
+                              Y: =52
+                        - TASK_SUBMITTED_DATE:
+                            Control: ModernText
+                            Properties:
+                              Color: =RGBA(96, 103, 112, 1)
+                              Height: =20
+                              Size: =11
+                              Text: |-
+                                =LblSubmitted & ": " & Text(Coalesce(ThisItem.Created, Today()), "[$-zh-TW]yyyy/mm/dd")
+                              Width: =Parent.TemplateWidth - 40
+                              X: =20
+                              Y: =80
+                        - BTN_OPEN_APP:
+                            Control: ModernButton
+                            Properties:
+                              AccessibleLabel: =LblOpenApplication
+                              BasePaletteColor: =RGBA(0, 112, 242, 1)
+                              Color: =RGBA(255, 255, 255, 1)
+                              Height: =42
+                              OnSelect: =Set(varSelectedTask, ThisItem); Set(varViewingTask, true); Set(varDecision, ""); Set(varComment, ""); Set(varSubmitError, ""); Set(varSuccessVisible, false)
+                              RadiusBottomLeft: =8
+                              RadiusBottomRight: =8
+                              RadiusTopLeft: =8
+                              RadiusTopRight: =8
+                              Size: =13
+                              Text: =LblOpenApplication
+                              Width: =Parent.TemplateWidth - 40
+                              X: =20
+                              Y: =148
+            - CON_DECISION:
+                Control: GroupContainer
+                Variant: AutoLayout
+                Properties:
+                  DropShadow: =DropShadow.None
+                  Fill: =RGBA(255, 255, 255, 0)
+                  LayoutDirection: =LayoutDirection.Vertical
+                  LayoutGap: =16
+                  LayoutMinHeight: =32
+                  LayoutMinWidth: =32
+                  LayoutOverflowY: =LayoutOverflow.Scroll
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =0
+                  RadiusTopRight: =0
+                  Visible: =varViewingTask
+                Children:
+                  - CON_TASK_DETAIL_CARD:
+                      Control: GroupContainer
+                      Variant: AutoLayout
+                      Properties:
+                        BorderColor: =RGBA(217, 217, 217, 1)
+                        BorderThickness: =1
+                        Fill: =RGBA(255, 255, 255, 1)
+                        LayoutDirection: =LayoutDirection.Vertical
+                        LayoutGap: =8
+                        PaddingBottom: =20
+                        PaddingLeft: =20
+                        PaddingRight: =20
+                        PaddingTop: =20
+                        RadiusBottomLeft: =12
+                        RadiusBottomRight: =12
+                        RadiusTopLeft: =12
+                        RadiusTopRight: =12
+                      Children:
+                        - LBL_DETAIL_TITLE:
+                            Control: ModernText
+                            Properties:
+                              FontWeight: =FontWeight.Bold
+                              Size: =18
+                              Text: =Coalesce(varSelectedTask.Title, "")
+                        - LBL_DETAIL_APPLICANT:
+                            Control: ModernText
+                            Properties:
+                              Color: =RGBA(88, 96, 105, 1)
+                              Size: =13
+                              Text: |-
+                                =LblApplicant & ": " & Coalesce(varSelectedTask.Applicant.DisplayName, "")
+                        - LBL_DETAIL_DATE:
+                            Control: ModernText
+                            Properties:
+                              Color: =RGBA(88, 96, 105, 1)
+                              Size: =13
+                              Text: |-
+                                =LblSubmitted & ": " & Text(Coalesce(varSelectedTask.Created, Today()), "[$-zh-TW]yyyy/mm/dd")
+                        - LBL_DETAIL_STATUS:
+                            Control: ModernText
+                            Properties:
+                              Color: =RGBA(88, 96, 105, 1)
+                              Size: =13
+                              Text: |-
+                                =LblStatus & ": " & Coalesce(varSelectedTask.TaskStatus.Value, "")
+                  - CON_APPROVAL_FORM:
+                      Control: GroupContainer
+                      Variant: AutoLayout
+                      Properties:
+                        BorderColor: =RGBA(217, 217, 217, 1)
+                        BorderThickness: =1
+                        Fill: =RGBA(255, 255, 255, 1)
+                        LayoutDirection: =LayoutDirection.Vertical
+                        LayoutGap: =16
+                        PaddingBottom: =24
+                        PaddingLeft: =24
+                        PaddingRight: =24
+                        PaddingTop: =24
+                        RadiusBottomLeft: =12
+                        RadiusBottomRight: =12
+                        RadiusTopLeft: =12
+                        RadiusTopRight: =12
+                      Children:
+                        - LBL_SECTION_DECISION:
+                            Control: ModernText
+                            Properties:
+                              FontWeight: =FontWeight.Bold
+                              Size: =16
+                              Text: =LblDecision
+                        - RAD_DECISION:
+                            Control: ModernRadio
+                            Properties:
+                              AccessibleLabel: =LblDecision
+                              Font: =Font.'Segoe UI'
+                              ItemDisplayText: ="Value"
+                              Items: =Table({Value:"Approve"}, {Value:"Reject"})
+                              OnChange: =Set(varDecision, Self.Selected.Value)
+                              RadioSelectionFill: =If(Self.Selected.Value = "Approve", RGBA(0, 140, 80, 1), RGBA(200, 50, 50, 1))
+                        - LBL_SECTION_COMMENT:
+                            Control: ModernText
+                            Properties:
+                              FontWeight: =FontWeight.Semibold
+                              Size: =14
+                              Text: =LblComment
+                        - TXT_COMMENT:
+                            Control: ModernTextInput
+                            Properties:
+                              AccessibleLabel: =LblComment
+                              Default: =varComment
+                              Height: =120
+                              OnChange: =Set(varComment, Self.Text)
+                              Placeholder: =If(varLang = "EN", "Enter your comment...", "請輸入備註...")
+                              Type: =TextInputType.Multiline
+                              ValidationState: =If(varSubmitError <> "" && IsBlank(Trim(Self.Text)), ValidationState.Error, ValidationState.None)
+                              Width: =Parent.Width
+                        - LBL_ERROR:
+                            Control: ModernText
+                            Properties:
+                              Color: =RGBA(200, 50, 50, 1)
+                              Size: =12
+                              Text: =varSubmitError
+                              Visible: =varSubmitError <> ""
+                        - BTN_SUBMIT:
+                            Control: ModernButton
+                            Properties:
+                              AccessibleLabel: =LblSubmit
+                              BasePaletteColor: =If(varDecision = "Approve", RGBA(0, 140, 80, 1), If(varDecision = "Reject", RGBA(200, 50, 50, 1), RGBA(0, 112, 242, 1)))
+                              DisplayMode: =If(varIsSubmitting || IsBlank(varDecision), DisplayMode.Disabled, DisplayMode.Edit)
+                              Height: =44
+                              OnSelect: |-
+                                =If(varDecision = "Reject" && IsBlank(Trim(varComment)),
+                                  Set(varSubmitError, LblCommentRequired),
+                                  Set(varSubmitError, "");
+                                  Set(varIsSubmitting, true);
+                                  Patch(CL_ApprovalTasks, varSelectedTask, {TaskStatus: {Value: "Completed"}});
+                                  Set(varIsSubmitting, false);
+                                  Set(varSuccessVisible, true);
+                                  Refresh(CL_ApprovalTasks);
+                                  Set(varViewingTask, false);
+                                  Set(varSelectedTask, Blank());
+                                  Set(varDecision, "");
+                                  Set(varComment, "")
+                                )
+                              RadiusBottomLeft: =8
+                              RadiusBottomRight: =8
+                              RadiusTopLeft: =8
+                              RadiusTopRight: =8
+                              Size: =14
+                              Text: =LblSubmit
+                              Width: =200
+                        - SPN_LOADING:
+                            Control: Spinner
+                            Properties:
+                              AccessibleLabel: =If(varLang = "EN", "Submitting decision", "提交審批決定中")
+                              BasePaletteColor: =RGBA(0, 112, 242, 1)
+                              SpinnerSize: ='Spinner.SpinnerSize'.Medium
+                              Visible: =varIsSubmitting
+            - CON_SUCCESS:
+                Control: GroupContainer
+                Variant: AutoLayout
+                Properties:
+                  DropShadow: =DropShadow.Regular
+                  Fill: =RGBA(228, 248, 235, 1)
+                  LayoutAlignItems: =LayoutAlignItems.Center
+                  LayoutDirection: =LayoutDirection.Horizontal
+                  LayoutGap: =8
+                  PaddingBottom: =16
+                  PaddingLeft: =20
+                  PaddingRight: =20
+                  PaddingTop: =16
+                  RadiusBottomLeft: =12
+                  RadiusBottomRight: =12
+                  RadiusTopLeft: =12
+                  RadiusTopRight: =12
+                  Visible: =varSuccessVisible
+                Children:
+                  - LBL_SUCCESS:
+                      Control: ModernText
+                      Properties:
+                        Color: =RGBA(0, 140, 80, 1)
+                        FontWeight: =FontWeight.Semibold
+                        Size: =14
+                        Text: =LblSuccess
