@@ -162,7 +162,7 @@ Screens:
                         Items: =Filter(CL_ApprovalTasks, Lower(User().Email) in Lower(Approver.Claims) && TaskStatus.Value <> "Completed" && TaskStatus.Value <> "Terminated" && TaskStatus.Value <> "Approved" && TaskStatus.Value <> "Rejected")
                         LoadingSpinner: =LoadingSpinner.Data
                         TemplatePadding: =10
-                        TemplateSize: =310
+                        TemplateSize: =360
                         Width: =Parent.Width
                         WrapCount: =1
                       Children:
@@ -312,6 +312,34 @@ Screens:
                               Width: =Parent.TemplateWidth - 48
                               X: =24
                               Y: =216
+                        - BTN_DEEPLINK:
+                            Control: Classic/Button
+                            Properties:
+                              BorderColor: =RGBA(255, 255, 255, 0.4)
+                              BorderThickness: =1
+                              Color: =RGBA(0, 112, 242, 1)
+                              DisabledBorderColor: =ColorFade(Self.BorderColor, 70%)
+                              DisabledColor: =ColorFade(Self.Fill, 90%)
+                              DisabledFill: =ColorFade(Self.Fill, 70%)
+                              Fill: =RGBA(255, 255, 255, 1)
+                              Font: =Font.'Segoe UI'
+                              Height: =42
+                              HoverBorderColor: =RGBA(0, 112, 242, 1)
+                              HoverColor: =Self.Color
+                              HoverFill: =RGBA(235, 245, 254, 1)
+                              OnSelect: =Launch(ThisItem.DeepLink)
+                              PressedBorderColor: =Self.Fill
+                              PressedColor: =Self.Fill
+                              PressedFill: =RGBA(0, 64, 141, 1)
+                              RadiusBottomLeft: =8
+                              RadiusBottomRight: =8
+                              RadiusTopLeft: =8
+                              RadiusTopRight: =8
+                              Size: =13
+                              Text: =If(varLang = "EN", "Open Form", "開啟表單")
+                              Width: =Parent.TemplateWidth - 48
+                              X: =24
+                              Y: =294
                         - BTN_OPEN_APP:
                             Control: Classic/Button
                             Properties:
